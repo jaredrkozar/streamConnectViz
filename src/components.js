@@ -6,6 +6,7 @@ import { Icon } from 'leaflet'
 export function LocationTable(props) {
     //creates the location table
     return (
+        //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
         <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
         {props.locationList.map(location => (
           <div className="flex items-center justify-between items-center h-20 bg-inherit" key={location.id}>
