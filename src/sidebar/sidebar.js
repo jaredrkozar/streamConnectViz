@@ -1,7 +1,7 @@
 import "leaflet/dist/leaflet.css";
 import React, { useState } from "react";
 import { Image } from "react-bootstrap-icons";
-import { LocationTable, Map } from '../components'
+import { LocationTable, Map, SearchBar } from '../components'
 
 function Sidebar(props) {
   const [lcoationList, setLocationList] = useState([]);
@@ -53,6 +53,7 @@ function Sidebar(props) {
 
   return(
     <div className="space-y-12 left-5 top-20 relative w-full mr-12">
+      <SearchBar deleteFunction={deleteFromLocationList} checkLocationFunction={isItemInLocationList} addLocationFunction={addToLocationList}></SearchBar>
       <Map isItemInLocationList={isItemInLocationList} popoverLocationButtonClicked={popoverLocationButtonClicked}></Map>
       <LocationTable locationList={lcoationList} deleteFunction={deleteFromLocationList}></LocationTable>
       <div className="relative">

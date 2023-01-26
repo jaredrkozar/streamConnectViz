@@ -1,7 +1,8 @@
-import { XLg, Image } from "react-bootstrap-icons";
+import { XLg, Plus } from "react-bootstrap-icons";
 import pointData from "./data/sites.json";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from 'leaflet'
+import React, { useState } from "react";
 
 export function LocationTable(props) {
     //creates the location table
@@ -9,19 +10,26 @@ export function LocationTable(props) {
         //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
         <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
         {props.locationList.map(location => (
-          <div className="flex items-center justify-between items-center h-20 bg-inherit" key={location.id}>
-          <h1 className="text-xl">{location.name}</h1>
-
-          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => props.deleteFunction(location.id)}>
-          <XLg size={30}/>
-         </button>
-
-          </div>
+            TableRow(location.name, location.id, true, props.deleteFunction)
         ))}
          
       </div>
     )
 };
+
+function TableRow(locationName, locationID, isInList, deleteFunction, addFunction)  {
+    return (
+              <div className="flex items-center justify-between items-center h-20 bg-inherit" key={locationID}>
+          <h1 className="text-xl text-inherit">{locationName}</h1>
+
+          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => deleteFunction(locationID)}>
+          <XLg size={30}/>
+          
+         </button>
+
+          </div>
+    )
+}
 
 export function Map(props) {
     //creates the map and the popover when user clicks on a pin
@@ -136,7 +144,7 @@ function returnColor(num) {
     //returns the color that corresponds with ????????????
     if (num < 1.9) {
           return 'bg-red-500 dark:bg-red-400';
-    } else if (num <= 2.9) {X
+    } else if (num <= 2.9) {
             return 'bg-orange-600 dark:bg-orange-400';
     } else if (num <= 3.9) {
             return 'bg-yellow-600 dark:bg-yellow-400';
@@ -147,4 +155,31 @@ function returnColor(num) {
     } else if (6.0 <= num) {
             return 'bg-purple-600 dark:bg-purple-400';
       }
+}
+
+export function SearchBar(props) {
+
+  const [searchField, setSearchField] = useState("");
+
+    const filteredLocations = pointData.features.filter( person => {
+        return (
+            searchField != "" ? person.properties.locationName.includes(searchField) : null
+        );
+      })
+
+      return (
+        <div className="">
+            <input type="text" className="h-20 w-96 bg-slate-600 rounded-lg hover:bg-slate-500 focus:bg-slate-500" value={searchField} onChange={event => setSearchField(event.target.value)}
+            />
+
+            <div className="absolute h-25 w-96 z-20 bg-slate-500 rounded-lg shadow-md">
+
+                {
+                filteredLocations.map((location, id) => 
+                     TableRow(location.properties.locationName, location.properties.staSeq, props.isItemInLocationList(location.properties.staSeq))
+                )
+                }
+            </div>
+        </div>
+      )
 }
