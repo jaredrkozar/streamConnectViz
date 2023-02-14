@@ -53,7 +53,6 @@ d3.json('data/sites.geojson').then((map_data) => {
         function render_map(sids) {
             var features_sids = [];
             var features = map_data['features'];
-            //console.log(features);
 
             for(var i=0; i<features.length; i++){
                 for(var j=0; j<sids.length; j++){

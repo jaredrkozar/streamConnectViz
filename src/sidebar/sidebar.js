@@ -10,11 +10,11 @@ function Sidebar() {
   const [year, setYear] = useState("");
 
   return(
-    <div className="left-5 relative mr-12 flex flex-row">
-      <div className="h-1/2 w-1/2">
+    <div className="relative h-full flex flex-row gap-x-12 p-20">
+      <div className="w-1/2">
         <Map></Map>
       </div>
-        <div className="h-full w-1/2">
+        <div className="w-1/2">
         <TabBar></TabBar>
         </div>
       </div>
