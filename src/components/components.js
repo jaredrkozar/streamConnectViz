@@ -24,12 +24,23 @@ export function LocationTable() {
 
 function TableRow(locationName, locationID, isInList)  {
     const dispatch = useDispatch()
+
+    const icon = () => {
+        if (isInList == true) {
+            return <XLg size={32}/> 
+        } else {
+            return <Plus size={32}/>
+        }
+    }
     return (
               <div className="flex items-center justify-between items-center h-20 bg-inherit" key={locationID}>
-          <h1 className="text-xl text-inherit">{locationName}</h1>
+                <div className="inline-block">
+                    <h1 className="text-xl font-semibold text-inherit">{locationName}</h1>
+                    <h1 className="text-lg font-medium text-inherit">{locationID}</h1>
+                </div>
 
           <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => ItemSelected(locationName, locationID, isInList, dispatch)}>
-            {returnIcon(isInList)}
+            {icon(isInList)}
          </button>
 
           </div>
@@ -181,7 +192,7 @@ function returnColor(num) {
       }
 }
 
-export function SearchBar(props) {
+export function SearchLocations() {
 
   const [searchField, setSearchField] = useState("");
 
@@ -192,15 +203,15 @@ export function SearchBar(props) {
       })
 
       return (
-        <div className="">
-            <input type="text" className="h-20 w-96 bg-slate-600 rounded-lg hover:bg-slate-500 focus:bg-slate-500" value={searchField} onChange={event => setSearchField(event.target.value)}
+        <div className="py-4 h-80 overflow-auto">
+            <input type="text" className="h-16 w-full bg-slate-600 rounded-lg hover:bg-slate-500 focus:bg-slate-500" value={searchField} onChange={event => setSearchField(event.target.value)}
             />
 
-            <div className="absolute h-25 w-96 z-20 bg-slate-500 rounded-lg shadow-md">
+            <div className="relative w-full">
 
                 {
                 filteredLocations.map((location, id) => 
-                     TableRow(location.properties.locationName, location.properties.staSeq, props.isItemInLocationList(location.properties.staSeq))
+                     TableRow(location.properties.locationName, location.properties.staSeq, IsItemInArray(location.properties.staSeq))
                 )
                 }
             </div>
@@ -244,12 +255,4 @@ function IsItemInArray(locationId) {
     const state = store.getState()
     const isInArray = state.locationStore.initialArray.some(location => location.id == locationId)
     return isInArray
-}
-
-function returnIcon(isInList) {
-    if (isInList == true) {
-        return <XLg size={30}/> 
-    } else {
-        return <Plus size={30}/>
-    }
 }
