@@ -5,6 +5,7 @@ import { Icon } from 'leaflet'
 import React, { useState, useContext, Fragment } from "react";
 import { addLocation, removeItem } from "../locationListManager";
 import { useDispatch, useSelector } from 'react-redux';
+import {store} from "../store";
 
 export function LocationTable() { 
     //creates the location table
@@ -41,6 +42,8 @@ function TableRow(locationName, locationID, isInList)  {
 export function Map() {
     //creates the map and the popover when user clicks on a pin
     const [currentLocation, setCurrentLocation] = useState([]);
+    const auth = useSelector(state => state.locationStore);
+    const dispatch = useDispatch()
 
     return (
         <div className="relative h-80 rounded-lg dark:invert dark:hue-rotate-180 dark:saturate-50 dark:brightness-100 dark:contrast-50	">
@@ -67,7 +70,7 @@ export function Map() {
           <h1 className="bold text-lg">{currentLocation.name}</h1>
           <h1 className="bold text-lg">{currentLocation.id}</h1>
 
-          <button className = "dark:border-sky-600 text-sky-600" onClick={() => UpdateArray(park.properties.locationName, park.properties.staSeq, IsItemInArray(park.properties.staSeq))}>Submit</button>
+          <button className = "dark:border-sky-600 text-sky-600" onClick={() =>ItemSelected(currentLocation.name, currentLocation.id, IsItemInArray(park.properties.staSeq), dispatch)}>Submit</button>
         
           </Popup>
           </Marker>
@@ -231,10 +234,18 @@ function UpdateArray(locationName, idNumber, isInArray) {
     // }
 }
 
+function ItemSelected(locationName, locationID, isInArray, dispatch) {
+    console.log(isInArray)
+    if (isInArray == true) {
+        dispatch(removeItem(locationID))
+    } else {
+        dispatch(addLocation({name: locationName, id: locationID}))
+    }
+}
+
 function IsItemInArray(locationId) {
-    const dispatch = useDispatch()
-    dispatch(addLocation({name: "location[0]", id: "locationId"}))
-    const auth = useSelector(state => state.locationStore.initialArray);
-    console.log(auth)
-    return false
+    const state = store.getState()
+    const isInArray = state.locationStore.initialArray.some(location => location.id == locationId)
+    console.log(isInArray)
+    return isInArray
 }
