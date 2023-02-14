@@ -45,11 +45,11 @@ function App() {
 
   return (
     <div className='bg-white dark:bg-slate-800 dark:text-white'>
-        <div className='flex flex-col gap-y-2 h-screen'>
-          <div className="w-screen h-1/2 relative left-12 mt-8 mb-8">
+        <div className='flex flex-col h-screen'>
+          <div className="w-screen h-1/2 relative">
             <Sidebar doneButtonAction={showImages}/>
           </div>
-          <div className="w-screen h-1/2 relative left-12 mt-8 mb-8">
+          <div className="w-screen h-1/2 relative">
           <MainPage array={locationDateArray}/>
           </div>
         </div>

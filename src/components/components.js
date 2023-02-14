@@ -43,8 +43,8 @@ export function Map() {
     const dispatch = useDispatch()
 
     return (
-        <div className="relative h-80 rounded-lg dark:invert dark:hue-rotate-180 dark:saturate-50 dark:brightness-100 dark:contrast-50	">
-        <MapContainer className="relative h-80" center={[41.519, -72.6617]}
+        <div className="relative h-full rounded-lg w-full rounded-lg dark:invert dark:hue-rotate-180 dark:saturate-50 dark:brightness-100 dark:contrast-50	">
+        <MapContainer className="absolute top-0 bottom-0 w-full" center={[41.519, -72.6617]}
       zoom={13}
       scrollWheelZoom={true} >
           <TileLayer
@@ -243,7 +243,6 @@ function ItemSelected(locationName, locationID, isInArray, dispatch) {
 function IsItemInArray(locationId) {
     const state = store.getState()
     const isInArray = state.locationStore.initialArray.some(location => location.id == locationId)
-    console.log(isInArray)
     return isInArray
 }
 
