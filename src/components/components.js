@@ -10,16 +10,16 @@ import {store} from "../store";
 export function LocationTable() { 
     //creates the location table
 
-    const selectedLocations = useSelector((state) => state.rrrrr);
-    // return (
-    //     //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
-    //     <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
-    //     {selectedLocations.map(location => (
-    //         TableRow(location.name, location.id, true)
-    //     ))}
-         
-    //   </div>
-    // )
+    const selectedLocations = useSelector((state) => state.locationStore);
+    return (
+        //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
+        <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
+        {selectedLocations.initialArray.map(location => (
+            TableRow(location.name, location.id, true)
+        ))}
+            
+    </div>
+    )
 };
 
 function TableRow(locationName, locationID, isInList)  {
@@ -28,11 +28,8 @@ function TableRow(locationName, locationID, isInList)  {
               <div className="flex items-center justify-between items-center h-20 bg-inherit" key={locationID}>
           <h1 className="text-xl text-inherit">{locationName}</h1>
 
-          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => isInList ? dispatch(addLocation(locationName, locationID)) : dispatch(removeItem(locationID))}>
-            (isInList == true)
-            ? <XLg size={30}/> 
-            : <Plus size={30}/>
-
+          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => ItemSelected(locationName, locationID, isInList, dispatch)}>
+            {returnIcon(isInList)}
          </button>
 
           </div>
@@ -248,4 +245,12 @@ function IsItemInArray(locationId) {
     const isInArray = state.locationStore.initialArray.some(location => location.id == locationId)
     console.log(isInArray)
     return isInArray
+}
+
+function returnIcon(isInList) {
+    if (isInList == true) {
+        return <XLg size={30}/> 
+    } else {
+        return <Plus size={30}/>
+    }
 }

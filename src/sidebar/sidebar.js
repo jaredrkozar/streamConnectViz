@@ -14,7 +14,7 @@ function Sidebar() {
       <div className="h-1/2 w-1/2">
         <Map></Map>
       </div>
-        <div className="h-1/2 w-1/2">
+        <div className="h-full w-1/2">
         <TabBar></TabBar>
         </div>
       </div>

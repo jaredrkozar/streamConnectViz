@@ -12,7 +12,7 @@ export const locationSlice = createSlice({
     },
     removeItem: (state, action) => {
       const locationToDelete = action.payload;
-      state.initialArray = state.initialArray.filter((location) => locationToDelete.id !== location.id)
+      state.initialArray = state.initialArray.filter((location) => locationToDelete !== location.id)
     }
   },
 });
