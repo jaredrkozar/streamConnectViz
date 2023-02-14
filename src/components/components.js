@@ -230,18 +230,6 @@ export function ButtonCreator(props) {
     )
 }
 
-function UpdateArray(locationName, idNumber, isInArray) {
-    console.log(" REMOVED FROM")
-    // const dispatch = useDispatch()
-    // if (isInArray == true) {
-    //     console.log(" REMOVED FROM")
-    //     dispatch(removeItem(idNumber))
-    // } else {
-    //     console.log("ADDED TO ARRAY")
-    //     dispatch(addLocation({name: locationName, id: idNumber}))
-    // }
-}
-
 function ItemSelected(locationName, locationID, isInArray, dispatch) {
     console.log(isInArray)
     if (isInArray == true) {
