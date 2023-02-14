@@ -18,7 +18,7 @@ function App() {
     //creates an array, and goes through all locations in the locationList
     const thirdArray = []
     for (var i = 0; i < locationList.length; i++) {
-
+      
       //geets the data for one location. If the location is in the array
       var val = dataArray[locationList[i].id];
       if (val != undefined) {
@@ -45,16 +45,15 @@ function App() {
 
   return (
     <div className='bg-white dark:bg-slate-800 dark:text-white'>
-        <div className='flex flex-row gap-x-4'>
-          <div className="flex-none h-screen">
+        <div className='flex flex-col gap-y-2 h-screen'>
+          <div className="w-screen h-1/2 relative left-12 mt-8 mb-8">
             <Sidebar doneButtonAction={showImages}/>
           </div>
-          <div className="w-screen h-screen relative left-12 top-12">
+          <div className="w-screen h-1/2 relative left-12 mt-8 mb-8">
           <MainPage array={locationDateArray}/>
           </div>
         </div>
     </div>
-
   )
 }
 

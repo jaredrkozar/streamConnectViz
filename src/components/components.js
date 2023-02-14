@@ -1,38 +1,47 @@
-import { XLg, Plus } from "react-bootstrap-icons";
-import pointData from "./data/sites.json";
+import { XLg, Plus, Send } from "react-bootstrap-icons";
+import pointData from "../data/sites.json";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from 'leaflet'
-import React, { useState } from "react";
+import React, { useState, useContext, Fragment } from "react";
+import { addLocation, removeItem } from "../locationListManager";
+import { useDispatch, useSelector } from 'react-redux';
 
-export function LocationTable(props) {
+export function LocationTable() { 
     //creates the location table
-    return (
-        //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
-        <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
-        {props.locationList.map(location => (
-            TableRow(location.name, location.id, true, props.deleteFunction)
-        ))}
+
+    const selectedLocations = useSelector((state) => state.rrrrr);
+    // return (
+    //     //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
+    //     <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
+    //     {selectedLocations.map(location => (
+    //         TableRow(location.name, location.id, true)
+    //     ))}
          
-      </div>
-    )
+    //   </div>
+    // )
 };
 
-function TableRow(locationName, locationID, isInList, deleteFunction, addFunction)  {
+function TableRow(locationName, locationID, isInList)  {
+    const dispatch = useDispatch()
     return (
               <div className="flex items-center justify-between items-center h-20 bg-inherit" key={locationID}>
           <h1 className="text-xl text-inherit">{locationName}</h1>
 
-          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => deleteFunction(locationID)}>
-          <XLg size={30}/>
-          
+          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => isInList ? dispatch(addLocation(locationName, locationID)) : dispatch(removeItem(locationID))}>
+            (isInList == true)
+            ? <XLg size={30}/> 
+            : <Plus size={30}/>
+
          </button>
 
           </div>
     )
 }
 
-export function Map(props) {
+export function Map() {
     //creates the map and the popover when user clicks on a pin
+    const [currentLocation, setCurrentLocation] = useState([]);
+
     return (
         <div className="relative h-80 rounded-lg dark:invert dark:hue-rotate-180 dark:saturate-50 dark:brightness-100 dark:contrast-50	">
         <MapContainer className="relative h-80" center={[41.519, -72.6617]}
@@ -43,21 +52,26 @@ export function Map(props) {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
   
-          {pointData.features.map(park => (
-          <Marker key={park.properties.staSeq} position={[
+          {pointData.features.map((park) => (
+            <Fragment key={park.properties.staSeq}>
+                          <Marker key={park.properties.staSeq} position={[
           park.geometry.coordinates[1],
           park.geometry.coordinates[0]
-          ]}>
-          <Popup>
-          <h1 className="bold text-lg">{park.properties.locationName}</h1>
-          <h1 className="bold text-lg">{park.properties.staSeq}</h1>
+          ]} eventHandlers={{
+            click: (e) => {
+                setCurrentLocation({name: park.properties.locationName, id: park.properties.staSeq})
+            },
+          }}>
+          <Popup key={park.properties.staSeq}>
+          
+          <h1 className="bold text-lg">{currentLocation.name}</h1>
+          <h1 className="bold text-lg">{currentLocation.id}</h1>
 
-          <button className = "dark:border-sky-600 text-sky-600" onClick={event =>  props.popoverLocationButtonClicked(park.properties.locationName, park.properties.staSeq)}>
-          {props.isItemInLocationList(park.properties.staSeq) == false ? "Add to List" : "Remove from List"}
-           </button>
+          <button className = "dark:border-sky-600 text-sky-600" onClick={() => UpdateArray(park.properties.locationName, park.properties.staSeq, IsItemInArray(park.properties.staSeq))}>Submit</button>
         
           </Popup>
           </Marker>
+            </Fragment>
           ))}
   </MapContainer>
         </div>
@@ -109,13 +123,23 @@ function GridImage(props) {
     const colorBox = ' w-40 h-28 ' + (props.color);
 
     return (
-        <div className={gapImage}>
+        <div className={gapImage} onClick={imageClicked()}>
             <div className={colorBox}>
-                <img className="relative h-5/6 w-full" src={require("./thumbs/" + props.imageFilePath)}></img>
+                <img className="relative h-5/6 w-full" src={require("../thumbs/" + props.imageFilePath)}></img>
             </div>
         </div>
     )
 };
+
+function imageClicked() {
+    // fetch(, {
+        // method: "GET"
+    // }) 
+//     .then(function(response) { return response.json(); })
+// .then(function(json) {
+
+// }
+}
 
 function returnColumnPlacement(day) {
     //returns the column that corresponds to the day
@@ -182,4 +206,35 @@ export function SearchBar(props) {
             </div>
         </div>
       )
+}
+
+export function ButtonCreator(props) {
+    return (
+        <div className="">
+            <button class="relative w-12 overflow-hidden inline-flex hover:w-96 gap-x-4 p-2 bg-sky-700">
+                <XLg size={20}/>
+                <h1>Drrrr</h1>
+            </button>
+        </div>
+    )
+}
+
+function UpdateArray(locationName, idNumber, isInArray) {
+    console.log(" REMOVED FROM")
+    // const dispatch = useDispatch()
+    // if (isInArray == true) {
+    //     console.log(" REMOVED FROM")
+    //     dispatch(removeItem(idNumber))
+    // } else {
+    //     console.log("ADDED TO ARRAY")
+    //     dispatch(addLocation({name: locationName, id: idNumber}))
+    // }
+}
+
+function IsItemInArray(locationId) {
+    const dispatch = useDispatch()
+    dispatch(addLocation({name: "location[0]", id: "locationId"}))
+    const auth = useSelector(state => state.locationStore.initialArray);
+    console.log(auth)
+    return false
 }
