@@ -4,7 +4,21 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+          'fade-in-down': {
+              '0%': {
+                  opacity: '0',
+              },
+              '100%': {
+                  opacity: '1',
+              },
+          }
+      },
+      animation: {
+          'fade-in-down': 'fade-in-down 0.2s ease-out'
+      }
+  },
   },
   transitionProperty: {
     'width': 'width',
@@ -14,6 +28,7 @@ module.exports = {
   variants: {
     extend: {
       border: ['focus'],
+      width: ["responsive", "hover", "focus"]
     }
   },
 }

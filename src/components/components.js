@@ -143,13 +143,7 @@ function GridImage(props) {
 };
 
 function imageClicked() {
-    // fetch(, {
-        // method: "GET"
-    // }) 
-//     .then(function(response) { return response.json(); })
-// .then(function(json) {
-
-// }
+    //fetch code goes here
 }
 
 function returnColumnPlacement(day) {
@@ -204,7 +198,7 @@ export function SearchLocations() {
 
       return (
         <div className="py-4 h-80 overflow-auto">
-            <input type="text" className="h-16 w-full bg-slate-600 rounded-lg hover:bg-slate-500 focus:bg-slate-500" value={searchField} onChange={event => setSearchField(event.target.value)}
+            <input type="text" className="h-16 w-full bg-slate-200 dark:bg-slate-600 rounded-lg" value={searchField} onChange={event => setSearchField(event.target.value)}
             />
 
             <div className="relative w-full">

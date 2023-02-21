@@ -7,7 +7,6 @@ export const locationSlice = createSlice({
   initialState,
   reducers: {
     addLocation: (state, action) => {
-      console.log(action.payload)
       state.initialArray = [...state.initialArray, action.payload];
     },
     removeItem: (state, action) => {
