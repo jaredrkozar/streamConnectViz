@@ -92,8 +92,8 @@ export function Map() {
 export function ImageGrid(props) {
     //creates the grid on the right hand side of the screen
     return (
-        <div className="relative overflow-auto">
-        <div className="grid grid-cols-8 h-48 w-full">
+        <div className="relative overflow-auto flex flex-col flex-gap-4">
+        <div className="flex flex-row gap-x-44 h-12 w-full">
             <h1 className="bold text-2xl">Locations</h1>
             <h1 className="bold text-2xl">Mon</h1>
             <h1 className="bold text-2xl">Tue</h1>
@@ -117,8 +117,8 @@ function GridRow(props) {
     //a row of images
     console.log("IMAGE PROPS" + props.row[1])
     return (
-        <div className="grid grid-cols-8 w-full h-28">
-        <h1>{props.row[0]}</h1>
+        <div className="grid grid-cols-8 w-full h-28 items-center">
+        <h1 className="text-2xl">{props.row[0]}</h1>
 
         {
             props.row[1].map((image, id) => 
