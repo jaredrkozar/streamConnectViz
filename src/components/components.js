@@ -104,6 +104,7 @@ export function ImageGrid(props) {
             <h1 className="bold text-2xl">Sun</h1>
         </div>
         {
+            props.imageArray == undefined ? <h1>No images</h1>: 
             props.imageArray.map((row, id) => 
                 row[1] == undefined ? <h1 className="text-2xl">There are no pictures at {row[0]} for this date</h1> : <GridRow row ={row} key={id}></GridRow>
             )
@@ -114,13 +115,13 @@ export function ImageGrid(props) {
 
 function GridRow(props) {
     //a row of images
+    console.log("IMAGE PROPS" + props.row[1])
     return (
         <div className="grid grid-cols-8 w-full h-28">
         <h1>{props.row[0]}</h1>
 
         {
             props.row[1].map((image, id) => 
-            
             <GridImage imageFilePath={image[0]} columnNumber={returnColumnPlacement(image[1])} color={returnColor(image[2])} key={id}></GridImage>
             )
         }
@@ -129,6 +130,7 @@ function GridRow(props) {
 };
 
 function GridImage(props) {
+    
     //a single image with a color representing ?????????
     const gapImage = 'pr-20 col-start-' + props.columnNumber + ' col-end-' + (props.columnNumber + 1);
     const colorBox = ' w-40 h-28 ' + (props.color);
@@ -225,7 +227,6 @@ export function ButtonCreator(props) {
 }
 
 function ItemSelected(locationName, locationID, isInArray, dispatch) {
-    console.log(isInArray)
     if (isInArray == true) {
         dispatch(removeItem(locationID))
     } else {
