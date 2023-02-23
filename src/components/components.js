@@ -104,9 +104,9 @@ export function ImageGrid(props) {
             <h1 className="bold text-2xl">Sun</h1>
         </div>
         {
-            props.imageArray == undefined ? <h1>No images</h1>: 
+            props.imageArray == undefined ? <h1 className="text-2xl flex justify-center items-center">No locations selected. Select some locations above to view images for that location</h1>: 
             props.imageArray.map((row, id) => 
-                row[1] == undefined ? <h1 className="text-2xl">There are no pictures at {row[0]} for this date</h1> : <GridRow row ={row} key={id}></GridRow>
+                row[1] == undefined ? <h1 className="text-2xl flex justify-center items-center">There are no pictures at {row[0]} for this date</h1> : <GridRow row ={row} key={id}></GridRow>
             )
         }
         </div>
