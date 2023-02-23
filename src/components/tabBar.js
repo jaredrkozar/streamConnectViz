@@ -18,7 +18,7 @@ export function TabBar() {
           appList.map((tab) => (
             <Tab key={tab.name} className={({ selected }) =>
             classNames('focus:outline-none transition-width duration-500 ease p-4 pointer-events-auto inline-flex items-center gap-x-4 group rounded-lg text-xl font-medium text-white overflow-hidden',
-            selected ? 'w-12 lg:w-fit bg-navyBlue-600' : "hover:bg-navyBlue-600/75 hover:ease-out duration-500 w-12 pl-2")}
+            selected ? 'w-12 lg:w-fit bg-navyBlue-600' : "hover:bg-navyBlue-700 hover:ease-out duration-500 w-12 pl-2")}
             >
               <div className='items-center'>{tab.icon}</div>
               <div className='whitespace-nowrap focus-within:w-40'>{tab.name}</div>
@@ -33,7 +33,7 @@ export function TabBar() {
       </Tab.Group>
 
             <div className='absolute top-0 right-0'>
-              <button className='bg-navyBlue-600 w-20 lg:w-fit h-14 p-2 pointer-events-auto flex flex-row items-center gap-x-4 group rounded-lg text-xl font-medium text-white overflow-hidden' onClick={event => ImageButtonClicked(dispatch)}>
+              <button className='bg-navyBlue-600 hover:bg-navyBlue-700 hover:ease-out duration-500 w-20 lg:w-fit h-14 p-2 pointer-events-auto flex flex-row items-center gap-x-4 group rounded-lg text-xl font-medium text-white overflow-hidden' onClick={event => ImageButtonClicked(dispatch)}>
                 <div className='items-center'>Get Images</div>
                 <Images size={26}></Images>
               </button>

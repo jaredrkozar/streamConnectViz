@@ -115,7 +115,6 @@ export function ImageGrid(props) {
 
 function GridRow(props) {
     //a row of images
-    console.log("IMAGE PROPS" + props.row[1])
     return (
         <div className="grid grid-cols-8 w-full h-28 items-center">
         <h1 className="text-2xl">{props.row[0]}</h1>
