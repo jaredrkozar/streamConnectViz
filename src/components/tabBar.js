@@ -1,12 +1,34 @@
-import { Tab } from '@headlessui/react'
+import { Tab, Popover } from '@headlessui/react'
 import classNames from 'classnames';
 import {appList} from "./tabBarItems"
 import { LocationTable, SearchLocations } from '../components/components'
+import { DatesTable, SelectDatePopup } from '../components/calender'
 import { Images } from "react-bootstrap-icons";
 import {store} from "../store";
-import { addImage } from "../imageManager";
+import { addImage } from "../reducers/imageManager";
 import { useDispatch, useSelector } from 'react-redux';
+import { Search, CalendarPlus } from "react-bootstrap-icons";
 
+function Card(props) {
+    return (
+        <div className='relative top-4'>
+        <div className='flex w-full flex-wrap flex-row items-center justify-between px-2'>
+            <div className='flex flex-col relative w-5/6'>
+                <h1 className='text-2xl font-bold'>{props.title}</h1>
+                <h1>{props.subtitle}</h1>
+            </div>
+            <Popover className="relative">
+                <Popover.Button>{props.popoverIcon}</Popover.Button>
+
+                <Popover.Panel className="absolute z-10 right-0 bg-white shadow-md dark:bg-slate-700 w-96 rounded-lg">
+                    {props.popoverPanel}
+                </Popover.Panel>
+            </Popover>
+        </div>
+        {props.children}
+    </div>
+    )
+}
 export function TabBar() {
   const dispatch = useDispatch()
     return (
@@ -26,10 +48,23 @@ export function TabBar() {
           ))}
         </Tab.List>
         <Tab.Panels>
-          <Tab.Panel><LocationTable></LocationTable></Tab.Panel>
-          <Tab.Panel><SearchLocations></SearchLocations></Tab.Panel>
-          <Tab.Panel>Content 3</Tab.Panel>
+
+          <Tab.Panel>
+            
+            <Card title="Location List" subtitle="View, edit, and add to your list of selected locations" popoverIcon={<Search size={28}/>} popoverPanel={<SearchLocations></SearchLocations>}>
+            <LocationTable></LocationTable>
+                </Card>
+            </Tab.Panel>
+
+          <Tab.Panel>
+            
+            <Card title="Date List" subtitle="View, edit, and add to your list of selected dates. The map is updated automatically when you add or remove a location" popoverIcon={<CalendarPlus size={28}/>} popoverPanel={<SelectDatePopup></SelectDatePopup>}>
+            <DatesTable></DatesTable>
+                </Card>
+            </Tab.Panel>
+
         </Tab.Panels>
+
       </Tab.Group>
 
             <div className='absolute top-0 right-0'>
@@ -39,8 +74,6 @@ export function TabBar() {
               </button>
             </div>
         </div>
-
-
     )
 }
 

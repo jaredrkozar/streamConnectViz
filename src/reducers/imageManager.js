@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Images } from "react-bootstrap-icons";
-import imageData from "./data/img_map.json";
+import imageData from "../data/img_map.json";
 const initialState = {initialImageArray: []};
 
 export const imageSlice = createSlice({

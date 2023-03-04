@@ -14,7 +14,6 @@ function MainPage(props) {
     }
     
     const imageArray = useSelector((state) => state.imageStore);
-    console.log(imageArray.initialImageArray[0])
     return ( 
         <div className="">
             {imageArray.initialImageArray == undefined ? <h1 className='text-4xl text-black dark:text-white flex items-center justify-center'>Select images ajjffjjf0klf,cl</h1> : 

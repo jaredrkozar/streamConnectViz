@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import imageData from "./data/img_map.json";
 
 function App() {
+  
   const [locationDateArray, setlocationDateArray] = useState([]);
-
+  
   const showImages = (date, locationList) => {
     //takes in the date and the list of locations as a parameter
 

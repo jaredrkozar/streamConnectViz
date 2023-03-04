@@ -3,7 +3,7 @@ import pointData from "../data/sites.json";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from 'leaflet'
 import React, { useState, useContext, Fragment } from "react";
-import { addLocation, removeItem } from "../locationListManager";
+import { addLocation, removeItem } from "../reducers/locationListManager";
 import { useDispatch, useSelector } from 'react-redux';
 import {store} from "../store";
 
@@ -198,7 +198,7 @@ export function SearchLocations() {
       })
 
       return (
-        <div className="py-4 h-80 overflow-auto">
+        <div className="p-4 h-80 overflow-auto">
             <input type="text" className="h-16 w-full bg-slate-200 dark:bg-slate-600 rounded-lg" value={searchField} onChange={event => setSearchField(event.target.value)}
             />
 
@@ -212,17 +212,6 @@ export function SearchLocations() {
             </div>
         </div>
       )
-}
-
-export function ButtonCreator(props) {
-    return (
-        <div className="">
-            <button class="relative w-12 overflow-hidden inline-flex hover:w-96 gap-x-4 p-2 bg-sky-700">
-                <XLg size={20}/>
-                <h1>Drrrr</h1>
-            </button>
-        </div>
-    )
 }
 
 function ItemSelected(locationName, locationID, isInArray, dispatch) {
