@@ -95,30 +95,92 @@ const year3data = [
 ]
 
 const year2data = [
-    "Hello",
-    "Goodbye"
+    "18-03-26",
+    "18-04-02",
+    "18-04-09",
+    "18-04-16",
+    "18-04-23",
+    "18-04-30",
+    "18-05-07",
+    "18-05-14",
+     "18-05-21",
+    "18-05-28",
+    "18-06-04",
+    "18-06-11",
+    "18-06-18",
+    "18-06-25",
+    "18-07-02",
+    "18-07-09",
+    "18-07-16",
+    "18-07-23",
+    "18-07-30",
+    "18-08-06",
+    "18-08-13",
+    "18-08-20",
+    "18-08-27",
+    "18-09-03",
+    "18-09-10",
+    "18-09-17",
+    "18-09-24",
+    "18-10-01",
+    "18-10-08",
+    "18-10-15",
+    "18-10-22",
+    "18-10-29",
+    "18-11-05",
+    "18-11-12",
+    "18-11-19",
+    "18-11-26",
+]
+
+const year1data = [
+    "17-07-03",
+    "17-07-10",
+    "17-07-17",
+    "17-07-24",
+    "17-07-31",
+    "17-08-07",
+    "17-08-14",
+    "17-08-21",
+    "17-08-28",
+    "17-09-04",
+    "17-09-11",
+    "17-09-18",
+    "17-09-25",
+    "17-10-02",
+    "17-10-09",
+    "17-10-16",
+    "17-10-23",
+    "17-10-30",
 ]
 
 const yearData = [
     {year: "2019", data: year3data},
-    {year: "2018", data: year2data}
+    {year: "2018", data: year2data},
+    {year: "2017", data: year1data}
 ]
 
 function CustomDatePicker(props) {
     const isYearPicker = (props.title == "Year")
+
+    const stringToDate = (date) => {
+        var date = new Date(date); 
+        return date.toDateString();
+    }
+
     return (
         <div className="relative h-48">
         <h1 className="bold">{props.title}</h1>
         <div className="relative h-1/2">
             <Listbox value={props.getterValue} onChange={props.setterValue}>
-            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-600 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"><h1>{isYearPicker ? props.array[props.getterValue].year : props.getterValue}</h1></Listbox.Button>
+            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-600 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"><h1>{isYearPicker ? props.array[props.getterValue].year : stringToDate("20" + props.getterValue)}</h1></Listbox.Button>
             <Listbox.Options>
                 {props.array.map((person, index) => (
                 <Listbox.Option
                     key={index}
                     value={isYearPicker ? index : person}
                 >
-                    {isYearPicker ? person.year : person}
+                    {isYearPicker ? person.year : stringToDate("20" + person)}
                 </Listbox.Option>
                 ))}
             </Listbox.Options>
