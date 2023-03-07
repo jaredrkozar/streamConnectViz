@@ -2,6 +2,7 @@ import { Calendar, XCircleFill } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react'
 import { Listbox } from '@headlessui/react'
+import classNames from 'classnames';
 
 export function DatesTable() { 
     //creates the location table
@@ -41,7 +42,7 @@ function CalenderTableRow(date)  {
     )
 }
 
-export const year3data = [
+const year3data = [
     "19-01-07",
     "19-01-14",
     "19-01-21",
@@ -93,27 +94,50 @@ export const year3data = [
     "19-12-09",
 ]
 
-const yearData = [
-    {year: "2019", data: year3data}
+const year2data = [
+    "Hello",
+    "Goodbye"
 ]
 
-export function SelectDatePopup() {
-    const [selectedYear, setSelectedYear] = useState(year3data[0].year)
+const yearData = [
+    {year: "2019", data: year3data},
+    {year: "2018", data: year2data}
+]
+
+function CustomDatePicker(props) {
+    const isYearPicker = (props.title == "Year")
     return (
         <div className="relative h-48">
-            <Listbox className="relative top-20" value={selectedYear} onChange={setSelectedYear}>
-                <Listbox.Button className={"relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"}>{selectedYear}</Listbox.Button>
-                <Listbox.Options>
-                    {yearData.map((person) => (
-                    <Listbox.Option
-                        key={person.year}
-                        value={person.year}
-                    >
-                        {person.year}
-                    </Listbox.Option>
-                    ))}
-                </Listbox.Options>
-                </Listbox>
+        <h1 className="bold">{props.title}</h1>
+        <div className="relative h-1/2">
+            <Listbox value={props.getterValue} onChange={props.setterValue}>
+            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-600 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"><h1>{isYearPicker ? props.array[props.getterValue].year : props.getterValue}</h1></Listbox.Button>
+            <Listbox.Options>
+                {props.array.map((person, index) => (
+                <Listbox.Option
+                    key={index}
+                    value={isYearPicker ? index : person}
+                >
+                    {isYearPicker ? person.year : person}
+                </Listbox.Option>
+                ))}
+            </Listbox.Options>
+            </Listbox>
+        </div>
+        </div>
+    )
+}
+
+export function SelectDatePopup() {
+    const [selectedYearIndex, setSelectedYearIndex] = useState(0)
+    const [selectedDate, setSelectedDate] = useState(yearData[selectedYearIndex].data[0])
+    return (
+        <div className="">
+            <CustomDatePicker title="Year" getterValue={selectedYearIndex} setterValue={setSelectedYearIndex} array={yearData}></CustomDatePicker>
+
+            <CustomDatePicker title="Date" getterValue={selectedDate} setterValue={setSelectedDate} array={yearData[selectedYearIndex].data}></CustomDatePicker>
+
+            <h1>The currently selected date is {selectedDate}</h1>
         </div>
     )
 }
