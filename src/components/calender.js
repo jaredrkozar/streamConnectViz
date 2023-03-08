@@ -1,4 +1,4 @@
-import { Calendar, XCircleFill } from "react-bootstrap-icons";
+import { Calendar, XCircleFill, CalendarCheck } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react'
 import { Listbox } from '@headlessui/react'
@@ -160,13 +160,13 @@ const yearData = [
     {year: "2017", data: year1data}
 ]
 
+const stringToDate = (date) => {
+    var date = new Date(date); 
+    return date.toDateString();
+}
+
 function CustomDatePicker(props) {
     const isYearPicker = (props.title == "Year")
-
-    const stringToDate = (date) => {
-        var date = new Date(date); 
-        return date.toDateString();
-    }
 
     return (
         <div className="relative h-48">
@@ -193,13 +193,24 @@ function CustomDatePicker(props) {
 export function SelectDatePopup() {
     const [selectedYearIndex, setSelectedYearIndex] = useState(0)
     const [selectedDate, setSelectedDate] = useState(yearData[selectedYearIndex].data[0])
+    
     return (
-        <div className="">
-            <CustomDatePicker title="Year" getterValue={selectedYearIndex} setterValue={setSelectedYearIndex} array={yearData}></CustomDatePicker>
+        <div className="h-48 w-full ">
+            <div className='absolute top-2 right-2'>
+                <button className='bg-navyBlue-500 hover:bg-navyBlue-600 dark:bg-navyBlue-600 dark:hover:bg-navyBlue-700 hover:ease-out duration-500 w-16 lg:w-fit h-12 p-1 pointer-events-auto flex flex-row items-center gap-x-4 group rounded-lg text-xl font-medium text-white overflow-hidden' onClick={event => console.log("SLSLSL")}>
+                    <div className='items-center'>Add Date</div>
+                    <CalendarCheck size={20}></CalendarCheck>
+                </button>
+            </div>
 
-            <CustomDatePicker title="Date" getterValue={selectedDate} setterValue={setSelectedDate} array={yearData[selectedYearIndex].data}></CustomDatePicker>
+            <div className="h-10 w-full gap-x-2 flex flex-col relative items-center justify-center top-36">
+                <div className="flex flex-row relative gap-x-20 w-full items-center justify-center h-2">
+                    <CustomDatePicker title="Year" getterValue={selectedYearIndex} setterValue={setSelectedYearIndex} array={yearData}></CustomDatePicker>
 
-            <h1>The currently selected date is {selectedDate}</h1>
+                    <CustomDatePicker title="Date" getterValue={selectedDate} setterValue={setSelectedDate} array={yearData[selectedYearIndex].data}></CustomDatePicker>
+                </div>
+            <h1>The currently selected date is {stringToDate("20" + selectedDate)}</h1>
+        </div>
         </div>
     )
 }
