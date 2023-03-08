@@ -173,12 +173,12 @@ function CustomDatePicker(props) {
         <h1 className="bold">{props.title}</h1>
         <div className="relative h-1/2">
             <Listbox value={props.getterValue} onChange={props.setterValue}>
-            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-600 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"><h1>{isYearPicker ? props.array[props.getterValue].year : stringToDate("20" + props.getterValue)}</h1></Listbox.Button>
-            <Listbox.Options>
+            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 dark:bg-slate-600 py-2 pl-3 pr-10 text-left focus:outline-none "><h1>{isYearPicker ? props.array[props.getterValue].year : stringToDate("20" + props.getterValue)}</h1></Listbox.Button>
+            <Listbox.Options className="rounded-lg">
                 {props.array.map((person, index) => (
                 <Listbox.Option
                     key={index}
-                    value={isYearPicker ? index : person}
+                    value={isYearPicker ? index : person} className="p-4 h-12 pl-2 flex items-center bg-slate-100 dark:bg-slate-600 hover:bg-slate-200 hover:dark:bg-slate-700"
                 >
                     {isYearPicker ? person.year : stringToDate("20" + person)}
                 </Listbox.Option>
