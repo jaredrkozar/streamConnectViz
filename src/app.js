@@ -1,17 +1,10 @@
 import Sidebar from './sidebar/sidebar';
 import MainPage from './sidebar/mainPage';
 import React, { useState } from "react";
-import imageData from "./data/img_map.json";
+const imageData = React.lazy(() => import('./data/img_map.json'));
 
 function App() {
   const [locationDateArray, setlocationDateArray] = useState([]);
-  
-  let kdkdk = Object.values(imageData);
-
-  for(let k = 0; k<kdkdk.length;k++) {
-    console.log(kdkdk[k].weekstart_date)
-  }
-
 
   const showImages = (date, locationList) => {
     //takes in the date and the list of locations as a parameter
@@ -50,7 +43,6 @@ function App() {
    setlocationDateArray(thirdArray)
   }
 
-  
   return (
     <div className='bg-white dark:bg-slate-800 dark:text-white'>
         <div className='flex flex-col h-screen'>

@@ -1,12 +1,11 @@
 import { XLg, Plus, Send } from "react-bootstrap-icons";
-import pointData from "../data/sites.json";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Icon } from 'leaflet'
-import React, { useState, useContext, Fragment } from "react";
-import { addLocation, removeItem } from "../reducers/locationListManager";
+import React, { useState, Fragment, lazy } from "react";
+import { addSelectedLocation, removeSelectedLocation } from "../reducers/locationListManager";
 import { useDispatch, useSelector } from 'react-redux';
 import {store} from "../store";
 
+const pointData = React.lazy(() => import('../data/sites.json'));
 export function LocationTable() { 
     //creates the location table
 
@@ -51,6 +50,7 @@ export function Map() {
     //creates the map and the popover when user clicks on a pin
     const [currentLocation, setCurrentLocation] = useState([]);
     const auth = useSelector(state => state.locationStore);
+    const dateArray = useSelector(state => state.dateStore);
     const dispatch = useDispatch()
 
     return (
@@ -63,9 +63,9 @@ export function Map() {
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           />
   
-          {pointData.features.map((park) => (
-            <Fragment key={park.properties.staSeq}>
-                          <Marker key={park.properties.staSeq} position={[
+          {auth.mapArray.locations != undefined && auth.mapArray.locations.map((park, index) => (
+            <Fragment key={index}>
+                          <Marker key={index} position={[
           park.geometry.coordinates[1],
           park.geometry.coordinates[0]
           ]} eventHandlers={{
@@ -216,9 +216,9 @@ export function SearchLocations() {
 
 function ItemSelected(locationName, locationID, isInArray, dispatch) {
     if (isInArray == true) {
-        dispatch(removeItem(locationID))
+        dispatch(removeSelectedLocation(locationID))
     } else {
-        dispatch(addLocation({name: locationName, id: locationID}))
+        dispatch(addSelectedLocation({name: locationName, id: locationID}))
     }
 }
 

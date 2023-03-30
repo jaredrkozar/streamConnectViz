@@ -7,6 +7,6 @@ export const store = configureStore({
     reducer: {
         locationStore: locationSlice.reducer,
         imageStore: imageSlice.reducer,
-        dateSlice: dateSlice.reducer
+        dateStore: dateSlice.reducer
     },
 })

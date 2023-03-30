@@ -2,17 +2,21 @@ import { Calendar, XCircleFill, CalendarCheck } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react'
 import { Listbox } from '@headlessui/react'
-import classNames from 'classnames';
+import { addDate } from "../reducers/dateListManager";
+import React, { lazy } from "react";
+import { addMapLocation } from "../reducers/locationListManager";
+import pointData from "../data/sites.json"
+import {store} from "../store";
 
 export function DatesTable() { 
     //creates the location table
 
-    const selectedDates = useSelector((state) => state.dateSlice);
+    const selectedDates = useSelector((state) => state.dateStore);
     return (
         //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
         <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
         {selectedDates.initialDateArray.map(date => (
-            CalenderTableRow(date.toDateString())
+            CalenderTableRow(stringToDate("20" + date.date))
         ))}
             
     </div>
@@ -161,7 +165,7 @@ const yearData = [
 ]
 
 const stringToDate = (date) => {
-    var date = new Date(date); 
+    var date = new Date(date);
     return date.toDateString();
 }
 
@@ -171,7 +175,7 @@ function CustomDatePicker(props) {
     return (
         <div className="relative h-48">
         <h1 className="bold">{props.title}</h1>
-        <div className="relative h-1/2">
+        <div className="relative h-96 overflow-auto">
             <Listbox value={props.getterValue} onChange={props.setterValue}>
             <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 dark:bg-slate-600 py-2 pl-3 pr-10 text-left focus:outline-none "><h1>{isYearPicker ? props.array[props.getterValue].year : stringToDate("20" + props.getterValue)}</h1></Listbox.Button>
             <Listbox.Options className="rounded-lg">
@@ -190,14 +194,22 @@ function CustomDatePicker(props) {
     )
 }
 
+function DateAdded(newDate, dispatch) {
+    dispatch(addDate({date: newDate}))
+    const state = store.getState()
+    const addedDates = pointData.features.filter(element => state.dateStore.initialDateArray.every(dateArr => element.dates.includes(dateArr.date)))
+    dispatch(addMapLocation({locations: addedDates}))
+}
+
 export function SelectDatePopup() {
     const [selectedYearIndex, setSelectedYearIndex] = useState(0)
     const [selectedDate, setSelectedDate] = useState(yearData[selectedYearIndex].data[0])
-    
+    const dispatch = useDispatch()
+
     return (
         <div className="h-48 w-full ">
             <div className='absolute top-2 right-2'>
-                <button className='bg-navyBlue-500 hover:bg-navyBlue-600 dark:bg-navyBlue-600 dark:hover:bg-navyBlue-700 hover:ease-out duration-500 w-16 lg:w-fit h-12 p-1 pointer-events-auto flex flex-row items-center gap-x-4 group rounded-lg text-xl font-medium text-white overflow-hidden' onClick={event => console.log("SLSLSL")}>
+                <button className='bg-navyBlue-500 hover:bg-navyBlue-600 dark:bg-navyBlue-600 dark:hover:bg-navyBlue-700 hover:ease-out duration-500 w-16 lg:w-fit h-12 p-1 pointer-events-auto flex flex-row items-center gap-x-4 group rounded-lg text-xl font-medium text-white overflow-hidden' onClick={event => DateAdded(selectedDate, dispatch)}>
                     <div className='items-center'>Add Date</div>
                     <CalendarCheck size={20}></CalendarCheck>
                 </button>
