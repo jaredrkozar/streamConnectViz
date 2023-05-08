@@ -1,12 +1,12 @@
-import { Calendar, XCircleFill, CalendarCheck } from "react-bootstrap-icons";
+import { XCircleFill, CalendarCheck } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react'
-import { Listbox } from '@headlessui/react'
-import { addDate } from "../reducers/dateListManager";
+import { addDate, removeDate } from "../reducers/dateListManager";
 import React, { lazy } from "react";
 import { addMapLocation } from "../reducers/locationListManager";
 import pointData from "../data/sites.json"
 import {store} from "../store";
+import { CustomButton, CustomDatePicker } from "./customComponents";
 
 export function DatesTable() { 
     //creates the location table
@@ -16,7 +16,7 @@ export function DatesTable() {
         //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
         <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
         {selectedDates.initialDateArray.map(date => (
-            CalenderTableRow(stringToDate("20" + date.date))
+            CalenderTableRow(date.date)
         ))}
             
     </div>
@@ -25,20 +25,18 @@ export function DatesTable() {
 
 function CalenderTableRow(date)  {
     const dispatch = useDispatch()
+    const dateString = stringToDate("20" + date)
 
     return (
-              <div className="flex items-center justify-between items-center h-20 bg-inherit" key={date}>
+              <div className="flex items-center justify-between items-center h-20 bg-inherit" key={dateString}>
                 <div className="inline-block">
-                    <h1 className="text-xl font-semibold text-inherit">{date}</h1>
+                    <h1 className="text-xl font-semibold text-inherit">{dateString}</h1>
                 </div>
 
         <div className="">
-        <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => console.log("SELECTED")}>
-            <Calendar/>
-         </button>
 
-         <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => console.log("SELECTED")}>
-            <XCircleFill/>
+         <button className = "relative dark:border-sky-600 text-sky-600" onClick={() => DateChanged(date, dispatch, "remove")}>
+            <XCircleFill size={20}/>
          </button>
         </div>
 
@@ -164,38 +162,8 @@ const yearData = [
     {year: "2017", data: year1data}
 ]
 
-const stringToDate = (date) => {
-    var date = new Date(date);
-    return date.toDateString();
-}
-
-function CustomDatePicker(props) {
-    const isYearPicker = (props.title == "Year")
-
-    return (
-        <div className="relative h-48">
-        <h1 className="bold">{props.title}</h1>
-        <div className="relative h-96 overflow-auto">
-            <Listbox value={props.getterValue} onChange={props.setterValue}>
-            <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 dark:bg-slate-600 py-2 pl-3 pr-10 text-left focus:outline-none "><h1>{isYearPicker ? props.array[props.getterValue].year : stringToDate("20" + props.getterValue)}</h1></Listbox.Button>
-            <Listbox.Options className="rounded-lg">
-                {props.array.map((person, index) => (
-                <Listbox.Option
-                    key={index}
-                    value={isYearPicker ? index : person} className="p-4 h-12 pl-2 flex items-center bg-slate-100 dark:bg-slate-600 hover:bg-slate-200 hover:dark:bg-slate-700"
-                >
-                    {isYearPicker ? person.year : stringToDate("20" + person)}
-                </Listbox.Option>
-                ))}
-            </Listbox.Options>
-            </Listbox>
-        </div>
-        </div>
-    )
-}
-
-function DateAdded(newDate, dispatch) {
-    dispatch(addDate({date: newDate}))
+function DateChanged(newDate, dispatch, dateState) {
+    dateState == "add" ? dispatch(addDate({date: newDate})) : dispatch(removeDate({date: newDate}))
     const state = store.getState()
     const addedDates = pointData.features.filter(element => state.dateStore.initialDateArray.every(dateArr => element.dates.includes(dateArr.date)))
     dispatch(addMapLocation({locations: addedDates}))
@@ -203,26 +171,27 @@ function DateAdded(newDate, dispatch) {
 
 export function SelectDatePopup() {
     const [selectedYearIndex, setSelectedYearIndex] = useState(0)
-    const [selectedDate, setSelectedDate] = useState(yearData[selectedYearIndex].data[0])
+    const [selectedDate, setSelectedDate] = useState(0)
     const dispatch = useDispatch()
 
     return (
         <div className="h-48 w-full ">
             <div className='absolute top-2 right-2'>
-                <button className='bg-navyBlue-500 hover:bg-navyBlue-600 dark:bg-navyBlue-600 dark:hover:bg-navyBlue-700 hover:ease-out duration-500 w-16 lg:w-fit h-12 p-1 pointer-events-auto flex flex-row items-center gap-x-4 group rounded-lg text-xl font-medium text-white overflow-hidden' onClick={event => DateAdded(selectedDate, dispatch)}>
-                    <div className='items-center'>Add Date</div>
-                    <CalendarCheck size={20}></CalendarCheck>
-                </button>
+                <CustomButton text="Add Date" image={<CalendarCheck size={20}></CalendarCheck>} onButtonClick={() => console.log(yearData[selectedYearIndex].data[selectedDate])}></CustomButton>
             </div>
 
             <div className="h-10 w-full gap-x-2 flex flex-col relative items-center justify-center top-36">
                 <div className="flex flex-row relative gap-x-20 w-full items-center justify-center h-2">
-                    <CustomDatePicker title="Year" getterValue={selectedYearIndex} setterValue={setSelectedYearIndex} array={yearData}></CustomDatePicker>
+                    <CustomDatePicker title="Year" getterValue={selectedYearIndex} setterValue={setSelectedYearIndex} array={yearData.map((yearIndex) => yearIndex.year)}></CustomDatePicker>
 
                     <CustomDatePicker title="Date" getterValue={selectedDate} setterValue={setSelectedDate} array={yearData[selectedYearIndex].data}></CustomDatePicker>
                 </div>
-            <h1>The currently selected date is {stringToDate("20" + selectedDate)}</h1>
         </div>
         </div>
     )
+}
+
+export function stringToDate(date) {
+    var date = new Date(date);
+    return date.toDateString();
 }

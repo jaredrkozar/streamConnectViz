@@ -1,17 +1,14 @@
 import { Tab, Popover } from '@headlessui/react'
 import classNames from 'classnames';
 import {appList} from "./tabBarItems"
-import { LocationTable, SearchLocations } from '../components/components'
+import { LocationTable } from '../components/components'
 import { DatesTable, SelectDatePopup } from '../components/calender'
-import { Images } from "react-bootstrap-icons";
-import {store} from "../store";
-import { addImage } from "../reducers/imageManager";
 import { useDispatch, useSelector } from 'react-redux';
 import { Search, CalendarPlus } from "react-bootstrap-icons";
 
 function Card(props) {
     return (
-        <div className='relative top-4'>
+        <div className='relative'>
         <div className='flex w-full flex-wrap flex-row items-center justify-between px-2'>
             <div className='flex flex-col relative w-5/6'>
                 <h1 className='text-2xl font-bold'>{props.title}</h1>
@@ -51,7 +48,7 @@ export function TabBar() {
 
           <Tab.Panel>
             
-            <Card title="Location List" subtitle="View, edit, and add to your list of selected locations" popoverIcon={<Search size={28}/>} popoverPanel={<SearchLocations></SearchLocations>}>
+            <Card title="Location List" subtitle="View, edit, and add to your list of selected locations">
             <LocationTable></LocationTable>
                 </Card>
             </Tab.Panel>
@@ -66,19 +63,6 @@ export function TabBar() {
         </Tab.Panels>
 
       </Tab.Group>
-
-            <div className='absolute top-0 right-0'>
-              <button className='bg-navyBlue-500 hover:bg-navyBlue-600 dark:bg-navyBlue-600 dark:hover:bg-navyBlue-700 hover:ease-out duration-500 w-20 lg:w-fit h-14 p-2 pointer-events-auto flex flex-row items-center gap-x-4 group rounded-lg text-xl font-medium text-white overflow-hidden' onClick={event => ImageButtonClicked(dispatch)}>
-                <div className='items-center'>Get Images</div>
-                <Images size={26}></Images>
-              </button>
-            </div>
         </div>
     )
-}
-
-function ImageButtonClicked(dispatch) {
-    const state = store.getState()
-    const locationarray = state.locationStore.initialArray
-    dispatch(addImage({locations: locationarray, date: '17-07-03'}))
 }

@@ -5,7 +5,6 @@ import { addSelectedLocation, removeSelectedLocation } from "../reducers/locatio
 import { useDispatch, useSelector } from 'react-redux';
 import {store} from "../store";
 
-const pointData = React.lazy(() => import('../data/sites.json'));
 export function LocationTable() { 
     //creates the location table
 
@@ -14,32 +13,26 @@ export function LocationTable() {
         //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
         <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
         {selectedLocations.initialArray.map(location => (
-            TableRow(location.name, location.id, true)
+            TableRow(location.name, location.id, location.date)
         ))}
             
     </div>
     )
 };
 
-function TableRow(locationName, locationID, isInList)  {
+function TableRow(locationName, locationID,locationDate)  {
     const dispatch = useDispatch()
 
-    const icon = () => {
-        if (isInList == true) {
-            return <XLg size={32}/> 
-        } else {
-            return <Plus size={32}/>
-        }
-    }
     return (
               <div className="flex items-center justify-between items-center h-20 bg-inherit" key={locationID}>
                 <div className="inline-block">
                     <h1 className="text-xl font-semibold text-inherit">{locationName}</h1>
                     <h1 className="text-lg font-medium text-inherit">{locationID}</h1>
+                    <h1 className="text-lg font-medium text-inherit">{locationDate}</h1>
                 </div>
 
-          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => ItemSelected(locationName, locationID, isInList, dispatch)}>
-            {icon(isInList)}
+          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => ItemSelected(locationName, locationID, locationDate, true, dispatch)}>
+            {<XLg size={32}/>}
          </button>
 
           </div>
@@ -48,13 +41,23 @@ function TableRow(locationName, locationID, isInList)  {
 
 export function Map() {
     //creates the map and the popover when user clicks on a pin
-    const [currentLocation, setCurrentLocation] = useState([]);
     const auth = useSelector(state => state.locationStore);
     const dateArray = useSelector(state => state.dateStore);
+    const [currentLocation, setCurrentLocation] = useState([]);
+    const [currentDate, setCurrentDate] = useState();
     const dispatch = useDispatch()
 
+    const handleDateChange = (e) => {
+        setCurrentDate(e.target.value)
+    }
     return (
-        <div className="relative h-full rounded-lg w-full rounded-lg dark:invert dark:hue-rotate-180 dark:saturate-50 dark:brightness-100 dark:contrast-50	">
+     <div className="w-full relative h-96">
+           
+          { dateArray.initialDateArray.length == 0 ?
+        <h1 className="bg-slate-700 rounded-lg h-full w-full flex items-center justify-center text-slate-500 font-bold text-center text-3xl">
+            Add some dates in the tab on the right to view locations
+        </h1> : (
+            <div className="h-full w-full relative rounded-lg dark:invert dark:hue-rotate-180 dark:saturate-50 dark:brightness-100 dark:contrast-50	">
         <MapContainer className="absolute top-0 bottom-0 w-full" center={[41.519, -72.6617]}
       zoom={13}
       scrollWheelZoom={true} >
@@ -73,12 +76,19 @@ export function Map() {
                 setCurrentLocation({name: park.properties.locationName, id: park.properties.staSeq})
             },
           }}>
-          <Popup key={park.properties.staSeq}>
+           <Popup key={park.properties.staSeq}>
           
           <h1 className="bold text-lg">{currentLocation.name}</h1>
           <h1 className="bold text-lg">{currentLocation.id}</h1>
 
-          <button className = "dark:border-sky-600 text-sky-600" onClick={() =>ItemSelected(currentLocation.name, currentLocation.id, IsItemInArray(park.properties.staSeq), dispatch)}>Submit</button>
+          <label htmlFor="cars">Choose a date:</label>
+            <select name="cars" id="cars" value={currentDate} onChange={handleDateChange}>
+            {dateArray.initialDateArray.map((date, index) => (
+            <option value={date.date} key={index}>{date.date}</option>
+        ))}
+            </select>
+
+          <button className = "dark:border-sky-600 text-sky-600" onClick={() =>ItemSelected(currentLocation.name, currentLocation.id, currentDate ?? dateArray.initialDateArray[0].date, IsItemInArray(park.properties.staSeq, currentDate ?? dateArray.initialDateArray[0].date), dispatch)}>Submit</button>
         
           </Popup>
           </Marker>
@@ -86,6 +96,8 @@ export function Map() {
           ))}
   </MapContainer>
         </div>
+        )}
+     </div>
     )
 };
 
@@ -135,17 +147,13 @@ function GridImage(props) {
     const colorBox = ' w-40 h-28 ' + (props.color);
 
     return (
-        <div className={gapImage} onClick={imageClicked()}>
+        <div className={gapImage}>
             <div className={colorBox}>
                 <img className="relative h-5/6 w-full" src={require("../thumbs/" + props.imageFilePath)}></img>
             </div>
         </div>
     )
 };
-
-function imageClicked() {
-    //fetch code goes here
-}
 
 function returnColumnPlacement(day) {
     //returns the column that corresponds to the day
@@ -187,43 +195,17 @@ function returnColor(num) {
       }
 }
 
-export function SearchLocations() {
 
-  const [searchField, setSearchField] = useState("");
-
-    const filteredLocations = pointData.features.filter( person => {
-        return (
-            searchField != "" ? person.properties.locationName.includes(searchField) : null
-        );
-      })
-
-      return (
-        <div className="p-4 h-80 overflow-auto">
-            <input type="text" className="h-16 w-full bg-slate-200 dark:bg-slate-600 rounded-lg" value={searchField} onChange={event => setSearchField(event.target.value)}
-            />
-
-            <div className="relative w-full">
-
-                {
-                filteredLocations.map((location, id) => 
-                     TableRow(location.properties.locationName, location.properties.staSeq, IsItemInArray(location.properties.staSeq))
-                )
-                }
-            </div>
-        </div>
-      )
-}
-
-function ItemSelected(locationName, locationID, isInArray, dispatch) {
+function ItemSelected(locationName, locationID, locationDate, isInArray, dispatch) {
     if (isInArray == true) {
-        dispatch(removeSelectedLocation(locationID))
+        dispatch(removeSelectedLocation({id: locationID, date: locationDate}))
     } else {
-        dispatch(addSelectedLocation({name: locationName, id: locationID}))
+        dispatch(addSelectedLocation({name: locationName, id: locationID, date: locationDate}))
     }
 }
 
-function IsItemInArray(locationId) {
+function IsItemInArray(locationId, locationDate) {
     const state = store.getState()
-    const isInArray = state.locationStore.initialArray.some(location => location.id == locationId)
+    const isInArray = state.locationStore.initialArray.some(location => (location.id == locationId) && (location.date == locationDate))
     return isInArray
 }

@@ -11,7 +11,7 @@ export const dateSlice = createSlice({
     },
     removeDate: (state, action) => {
       const locationToDelete = action.payload;
-      state.initialDateArray = state.initialDateArray.filter((location) => locationToDelete !== location.id)
+      state.initialDateArray = state.initialDateArray.filter((location) => locationToDelete.date !== location.date)
     }
   },
 });
