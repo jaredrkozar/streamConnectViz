@@ -7,12 +7,13 @@ export const locationSlice = createSlice({
   initialState,
   reducers: {
     addSelectedLocation: (state, action) => {
-      console.log("ADDED PAYLOAD" + action.payload)
       state.initialArray = [...state.initialArray, action.payload];
     },
     removeSelectedLocation: (state, action) => {
       const locationToDelete = action.payload;
-      state.initialArray = state.initialArray.filter(location => (location.id != locationToDelete.id) && (location.date != locationToDelete.date))
+      console.log(action.payload)
+      state.initialArray = state.initialArray.filter(location => (location.id != locationToDelete.id) || (location.date != locationToDelete.date))
+      console.log(state.initialArray)
     },
     addMapLocation: (state, action) => {
       state.mapArray = action.payload;

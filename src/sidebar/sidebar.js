@@ -36,18 +36,21 @@ function ImageButtonClicked() {
   selectedLocations.map((location) => {
     newImageArray.map((images) => {
       if (images.weekstart_date == location.date) {
-        // allImages.push({})
-        // console.log(images.data[location.id])
 
         const splitDate = images.weekstart_date.split("-")
 
-        // if (!allImages.includes("20" + splitDate[2])) {
-        //   allImages.push("20" + splitDate[2])
-        // }
-        
+        var year=allImages.findIndex(function(number) {
+          return number.year == ("20" + splitDate[0]);
+        });
+
+        console.log(year)
+      if (year < 0) {
+        allImages.push({year: ("20" + splitDate[0]), months: []})
       }
-    })
+      
+    }})
   })
+  console.log("allImages")
   console.log(allImages)
 }
 
@@ -94,4 +97,49 @@ function returnMonthDay(month) {
   }
   return monthString
 }
+
 export default Sidebar;
+
+// function ImageButtonClicked() {
+//   const state = store.getState()
+//   const selectedLocations = state.locationStore.initialArray
+//   const newImageArray = Object.values(imageData);
+
+//   const allImages = []
+  
+//   selectedLocations.map((location) => {
+//     newImageArray.map((images) => {
+//       if (images.weekstart_date == location.date) {
+
+//         const splitDate = images.weekstart_date.split("-")
+
+//         let bigCities = allImages.filter(function (e) {
+//           let images = e.year == "20" + splitDate[0];
+//           return images
+//       });
+      
+//         if (bigCities.length == 0) {
+//           allImages.push({year: "20" + splitDate[0], months: []})
+//         }
+
+//         console.log(bigCities.length)
+
+//         if (bigCities.length==0) {
+//           console.log("bigCities[0]")
+//           console.log(bigCities)
+//           bigCities.push({month: returnMonthDay(splitDate[1]), imagesForrMonth: images})
+//           console.log(bigCities)
+//         } else {
+//           console.log("DLDLDLDL")
+//         }
+        
+//         // else {
+//         //   let smallCities = bigCities.filter(product => product.months ==  returnMonthDay(splitDate[1]));
+//         //   console.log(smallCities)
+//         // }
+//       }
+//     })
+//   })
+//   console.log(allImages)
+// }
+

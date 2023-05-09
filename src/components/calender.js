@@ -1,4 +1,4 @@
-import { XCircleFill, CalendarCheck } from "react-bootstrap-icons";
+import { CalendarCheck } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react'
 import { addDate, removeDate } from "../reducers/dateListManager";
@@ -6,43 +6,25 @@ import React, { lazy } from "react";
 import { addMapLocation } from "../reducers/locationListManager";
 import pointData from "../data/sites.json"
 import {store} from "../store";
-import { CustomButton, CustomDatePicker } from "./customComponents";
+import { CustomButton, CustomDatePicker, CustomTable, CustomTableRow } from "./customComponents";
 
 export function DatesTable() { 
     //creates the location table
 
     const selectedDates = useSelector((state) => state.dateStore);
+    const dispatch = useDispatch()
+    
     return (
         //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
-        <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
-        {selectedDates.initialDateArray.map(date => (
-            CalenderTableRow(date.date)
-        ))}
-            
-    </div>
+        <CustomTable>
+        {selectedDates.initialDateArray.map((date, index) => (
+            <CustomTableRow key={index} onDelete={() => DateChanged(date.date, "remove", dispatch)}>
+                <h1 className="text-xl font-semibold text-inherit">{stringToDate("20" + date.date)}</h1>
+            </CustomTableRow>
+        ))}     
+    </CustomTable>
     )
 };
-
-function CalenderTableRow(date)  {
-    const dispatch = useDispatch()
-    const dateString = stringToDate("20" + date)
-
-    return (
-              <div className="flex items-center justify-between items-center h-20 bg-inherit" key={dateString}>
-                <div className="inline-block">
-                    <h1 className="text-xl font-semibold text-inherit">{dateString}</h1>
-                </div>
-
-        <div className="">
-
-         <button className = "relative dark:border-sky-600 text-sky-600" onClick={() => DateChanged(date, dispatch, "remove")}>
-            <XCircleFill size={20}/>
-         </button>
-        </div>
-
-          </div>
-    )
-}
 
 const year3data = [
     "19-01-07",
@@ -162,8 +144,8 @@ const yearData = [
     {year: "2017", data: year1data}
 ]
 
-function DateChanged(newDate, dispatch, dateState) {
-    dateState == "add" ? dispatch(addDate({date: newDate})) : dispatch(removeDate({date: newDate}))
+function DateChanged(dateToAdd, dateAction, dispatch) {
+    dateAction == "add" ? dispatch(addDate({date: dateToAdd})) : dispatch(removeDate({date: dateToAdd}))
     const state = store.getState()
     const addedDates = pointData.features.filter(element => state.dateStore.initialDateArray.every(dateArr => element.dates.includes(dateArr.date)))
     dispatch(addMapLocation({locations: addedDates}))
@@ -175,9 +157,10 @@ export function SelectDatePopup() {
     const dispatch = useDispatch()
 
     return (
-        <div className="h-48 w-full ">
+        <div className="h-48 w-full">
+            <h1 className="absolute top-2 left-2 text-2xl font-bold">Add Date</h1>
             <div className='absolute top-2 right-2'>
-                <CustomButton text="Add Date" image={<CalendarCheck size={20}></CalendarCheck>} onButtonClick={() => console.log(yearData[selectedYearIndex].data[selectedDate])}></CustomButton>
+                <CustomButton text="Add Date" image={<CalendarCheck size={20}></CalendarCheck>} onButtonClick={() => DateChanged(yearData[selectedYearIndex].data[selectedDate], "add", dispatch)}></CustomButton>
             </div>
 
             <div className="h-10 w-full gap-x-2 flex flex-col relative items-center justify-center top-36">
@@ -186,6 +169,7 @@ export function SelectDatePopup() {
 
                     <CustomDatePicker title="Date" getterValue={selectedDate} setterValue={setSelectedDate} array={yearData[selectedYearIndex].data}></CustomDatePicker>
                 </div>
+                <h1>The currently selected date is {yearData[selectedYearIndex].data[selectedDate]}</h1>
         </div>
         </div>
     )

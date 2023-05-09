@@ -1,43 +1,28 @@
-import { XLg, Plus, Send } from "react-bootstrap-icons";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import React, { useState, Fragment, lazy } from "react";
+import React, { useState, Fragment } from "react";
 import { addSelectedLocation, removeSelectedLocation } from "../reducers/locationListManager";
 import { useDispatch, useSelector } from 'react-redux';
 import {store} from "../store";
+import { CustomTable, CustomTableRow } from "./customComponents";
 
 export function LocationTable() { 
     //creates the location table
 
     const selectedLocations = useSelector((state) => state.locationStore);
+    const dispatch = useDispatch()
     return (
         //takes in list of locations and maps over them. FOr each location it creates a row wiith a delete button
-        <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
+        <CustomTable>
         {selectedLocations.initialArray.map(location => (
-            TableRow(location.name, location.id, location.date)
+            <CustomTableRow key={location.id} onDelete={() => ItemSelected(location.name, location.id, location.date, true, dispatch)}>
+                 <h1 className="text-xl font-semibold text-inherit">{location.name}</h1>
+                <h1 className="text-lg font-medium text-inherit">{location.id}</h1>
+                <h1 className="text-lg font-medium text-inherit">{location.date}</h1>
+            </CustomTableRow>
         ))}
-            
-    </div>
+    </CustomTable>
     )
 };
-
-function TableRow(locationName, locationID,locationDate)  {
-    const dispatch = useDispatch()
-
-    return (
-              <div className="flex items-center justify-between items-center h-20 bg-inherit" key={locationID}>
-                <div className="inline-block">
-                    <h1 className="text-xl font-semibold text-inherit">{locationName}</h1>
-                    <h1 className="text-lg font-medium text-inherit">{locationID}</h1>
-                    <h1 className="text-lg font-medium text-inherit">{locationDate}</h1>
-                </div>
-
-          <button className = "relative dark:border-sky-600 text-sky-600" onClick={event => ItemSelected(locationName, locationID, locationDate, true, dispatch)}>
-            {<XLg size={32}/>}
-         </button>
-
-          </div>
-    )
-}
 
 export function Map() {
     //creates the map and the popover when user clicks on a pin
@@ -73,6 +58,7 @@ export function Map() {
           park.geometry.coordinates[0]
           ]} eventHandlers={{
             click: (e) => {
+                
                 setCurrentLocation({name: park.properties.locationName, id: park.properties.staSeq})
             },
           }}>

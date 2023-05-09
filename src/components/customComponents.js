@@ -1,4 +1,5 @@
 import { Listbox } from '@headlessui/react'
+import { XLg } from "react-bootstrap-icons";
 
 function CustomButton(props) {
     return (
@@ -32,4 +33,26 @@ function CustomDatePicker(props) {
     )
 }
 
-export {CustomButton, CustomDatePicker};
+function CustomTable(props) {
+    return (
+        <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
+            {props.children}    
+        </div>
+    )
+}
+
+function CustomTableRow(props) {
+    return (
+        <div className="flex items-center justify-between items-center h-20 bg-inherit" key={props.key}>
+        <div className="inline-block">
+            {props.children}
+        </div>
+
+  <button className = "relative dark:border-sky-600 text-sky-600" onClick={props.onDelete}>
+    {<XLg size={32}/>}
+ </button>
+  </div>
+    )
+}
+
+export {CustomButton, CustomDatePicker, CustomTable, CustomTableRow};
