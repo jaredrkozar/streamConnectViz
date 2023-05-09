@@ -38,23 +38,22 @@ function ImageButtonClicked() {
       if (images.weekstart_date == location.date) {
 
         const splitDate = images.weekstart_date.split("-")
-
         var year=allImages.findIndex(function(number) {
           return number.year == ("20" + splitDate[0]);
         });
-      
+        
       if (year >= 0) {
         var month=allImages[year].months.findIndex(function(item) {
           return item.monthName == returnMonthDay(splitDate[1])
         });
-
+        
         if (month >= 0) {
-          allImages[year].months[month].images.push({images: [images]})
+          allImages[year].months[month].images.push(images)
         } else {
           allImages[year].months.push({monthName: returnMonthDay(splitDate[1]), images: [images]})
         }
       } else {
-        allImages.push({year: ("20" + splitDate[0]), months: []})
+        allImages.push({year: ("20" + splitDate[0]), months: [{monthName: returnMonthDay(splitDate[1]), images: [images]}]})
       }
 
     }})
