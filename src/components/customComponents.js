@@ -35,7 +35,7 @@ function CustomDatePicker(props) {
 
 function CustomTable(props) {
     return (
-        <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit">
+        <div className="divide-y divide-solid divide-gray-300 overflow-auto relative h-80 bg-inherit w-inherit">
             {props.children}    
         </div>
     )
