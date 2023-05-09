@@ -55,7 +55,7 @@ export function TabBar() {
 
           <Tab.Panel>
             
-            <Card title="Date List" subtitle="View, edit, and add to your list of selected dates. The map is updated automatically when you add or remove a location" popoverIcon={<CalendarPlus size={28}/>} popoverPanel={<SelectDatePopup></SelectDatePopup>}>
+            <Card title="Date List" subtitle="View, edit, and add to your list of selected dates. The map is updated automatically when you add or remove a date" popoverIcon={<CalendarPlus size={28}/>} popoverPanel={<SelectDatePopup></SelectDatePopup>}>
             <DatesTable></DatesTable>
                 </Card>
             </Tab.Panel>

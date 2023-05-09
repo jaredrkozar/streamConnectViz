@@ -30,7 +30,8 @@ function ImageButtonClicked() {
   const state = store.getState()
   const selectedLocations = state.locationStore.initialArray
   const newImageArray = Object.values(imageData);
-
+  const dispatch = useDispatch()
+  
   const allImages = []
   
   selectedLocations.map((location) => {
@@ -48,18 +49,18 @@ function ImageButtonClicked() {
         });
         
         if (month >= 0) {
-          allImages[year].months[month].images.push(images)
+          allImages[year].months[month].images.push({locationName: location.name, dataPoints: images.data[location.id]})
         } else {
-          allImages[year].months.push({monthName: returnMonthDay(splitDate[1]), images: [images]})
+          allImages[year].months.push({monthName: returnMonthDay(splitDate[1]), images: [{locationName: location.name, dataPoints: images.data[location.id]}]})
         }
       } else {
-        allImages.push({year: ("20" + splitDate[0]), months: [{monthName: returnMonthDay(splitDate[1]), images: [images]}]})
+        allImages.push({year: ("20" + splitDate[0]), months: [{monthName: returnMonthDay(splitDate[1]), images: [{locationName: location.name, dataPoints: images.data[location.id]}]}]})
       }
-
     }})
   })
   console.log("allImages")
   console.log(allImages)
+  dispatch(addImage({images: allImages}))
 }
 
 function returnMonthDay(month) {
